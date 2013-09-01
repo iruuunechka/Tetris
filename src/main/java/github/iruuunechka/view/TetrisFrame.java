@@ -14,5 +14,6 @@ public class TetrisFrame extends JFrame {
         setResizable(false);
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        panel.requestFocusInWindow();
     }
 }
