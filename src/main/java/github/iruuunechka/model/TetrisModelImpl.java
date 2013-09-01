@@ -25,14 +25,6 @@ public class TetrisModelImpl implements TetrisModel, Runnable {
         curPiece = this.pieceFactory.createPiece();
     }
 
-    private void delay() {
-        try {
-            Thread.sleep(delay);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void deleteLines() {
         int maxDeletedLine = 0;
         int countDeletedLines = 0;
@@ -105,7 +97,9 @@ public class TetrisModelImpl implements TetrisModel, Runnable {
 
     @Override
     public void gameOver() {
-        curThread.interrupt();
+        if (!curThread.isInterrupted()) {
+            curThread.interrupt();
+        }
     }
 
     @Override
@@ -160,7 +154,11 @@ public class TetrisModelImpl implements TetrisModel, Runnable {
         while (!Thread.interrupted()) {
             if (!isPaused) {
                 moveDown();
-                delay();
+                try {
+                    Thread.sleep(delay);
+                } catch (InterruptedException e) {
+                    break;
+                }
             }
         }
     }
