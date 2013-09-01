@@ -103,6 +103,11 @@ public class TetrisViewImpl extends JPanel implements TetrisView {
     }
 
     @Override
+    public void gameOver() {
+        pause();
+    }
+
+    @Override
     public int getHeight() {
         return gameHeight;
     }
