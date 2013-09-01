@@ -36,7 +36,7 @@ public class TetrisController implements KeyListener {
                 model.pause();
                 break;
             case KeyEvent.VK_P:
-                model.start();
+                model.play();
                 break;
         }
     }
