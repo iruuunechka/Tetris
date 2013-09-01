@@ -9,7 +9,7 @@ import github.iruuunechka.view.TetrisViewImpl;
 
 public class App {
     public static void main( String[] args ) {
-        TetrisViewImpl view = new TetrisViewImpl(20, 40, 10);
+        TetrisViewImpl view = new TetrisViewImpl(10, 20, 20);
         TetrisModelImpl model = new TetrisModelImpl(view, 1000, new RandomPieceFactory());
         view.addKeyListener(new TetrisController(model));
         new TetrisFrame(view);

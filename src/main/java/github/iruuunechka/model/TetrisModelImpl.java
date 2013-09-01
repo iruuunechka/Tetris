@@ -34,7 +34,8 @@ public class TetrisModelImpl implements TetrisModel, Runnable {
     private void deleteLines() {
         int maxDeletedLine = 0;
         int countDeletedLines = 0;
-        for (int i = field.size(); i > 0; --i) {
+        int size = field.size();
+        for (int i = size - 1; i > 0; --i) {
             int j;
             for (j = 0; j < field.get(i).length; ++j) {
                 if (!field.get(i)[j]) {
@@ -42,7 +43,7 @@ public class TetrisModelImpl implements TetrisModel, Runnable {
                 }
             }
             if (j == field.get(i).length) {
-                field.remove(maxDeletedLine);
+                field.remove(i);
                 maxDeletedLine = maxDeletedLine == 0 ? i : maxDeletedLine;
                 countDeletedLines++;
             }
@@ -50,18 +51,31 @@ public class TetrisModelImpl implements TetrisModel, Runnable {
         for (int i = 0; i < countDeletedLines; ++i) {
             field.add(0, new boolean[view.getWidth()]);
         }
-        view.deleteLine(maxDeletedLine);
+        if (countDeletedLines > 0) {
+            view.deleteLine(maxDeletedLine);
+        }
     }
 
     private boolean check(int[][] blocks) {
         for (int i = 0; i < blocks.length; ++i) {
-            for (int j = 0; j < blocks[0].length; ++j) {
-                if (field.get(i)[j]) {
-                    return false;
-                }
+            if (blocks[i][1] < 0 || blocks[i][1] >= field.size()) {
+                return false;
+            }
+            if (blocks[i][0] < 0 || blocks[i][0] >= field.get(blocks[i][1]).length) {
+                return false;
+            }
+            if (field.get(blocks[i][1])[blocks[i][0]]) {
+                return false;
             }
         }
         return true;
+    }
+
+    private void putFigure(int[][] blocks) {
+        for (int i = 0; i < blocks.length; ++i) {
+            field.get(blocks[i][1])[blocks[i][0]] = true;
+        }
+//        System.out.println("put");
     }
 
     @Override
@@ -101,6 +115,7 @@ public class TetrisModelImpl implements TetrisModel, Runnable {
             view.redraw(curPiece.getBlocks(), curBlocks);
             curPiece.down();
         } else {
+            putFigure(curPiece.getBlocks());
             deleteLines();
             curPiece = pieceFactory.createPiece();
             if (!check(curPiece.getBlocks())) {
