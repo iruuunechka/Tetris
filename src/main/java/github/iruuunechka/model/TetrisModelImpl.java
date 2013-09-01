@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class TetrisModelImpl implements TetrisModel, Runnable {
     private final TetrisView view;
-    private boolean isPaused;
+    private volatile boolean isPaused;
     private final int delay;
     private final ArrayList<boolean[]> field;
     private Piece curPiece;
@@ -95,7 +95,7 @@ public class TetrisModelImpl implements TetrisModel, Runnable {
     }
 
     @Override
-    public void moveDown() {
+    public synchronized void moveDown() {
         int[][] curBlocks = curPiece.getDownBlocks();
         if (check(curBlocks)) {
             view.redraw(curPiece.getBlocks(), curBlocks);
@@ -103,6 +103,10 @@ public class TetrisModelImpl implements TetrisModel, Runnable {
         } else {
             deleteLines();
             curPiece = pieceFactory.createPiece();
+            if (!check(curPiece.getBlocks())) {
+                 //TODO gameOver
+                view.pause();
+            }
         }
     }
 
@@ -117,9 +121,12 @@ public class TetrisModelImpl implements TetrisModel, Runnable {
 
     @Override
     public void run() {
-        while (!isPaused) {
-            moveDown();
-            delay();
+        curPiece = pieceFactory.createPiece();
+        while (!Thread.interrupted()) {
+            if (!isPaused) {
+                moveDown();
+                delay();
+            }
         }
     }
 }
