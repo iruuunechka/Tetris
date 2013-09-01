@@ -1,13 +1,11 @@
 package github.iruuunechka;
 
-/**
- * Hello world!
- *
- */
-public class App 
-{
-    public static void main( String[] args )
-    {
-        System.out.println( "Hello World!" );
+import github.iruuunechka.view.TetrisFrame;
+import github.iruuunechka.view.TetrisViewImpl;
+
+public class App {
+    public static void main( String[] args ) {
+        TetrisViewImpl view = new TetrisViewImpl(20, 40, 10);
+        new TetrisFrame(view);
     }
 }
