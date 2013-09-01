@@ -17,6 +17,14 @@ public class TetrisViewImpl extends JPanel implements TetrisView {
         Dimension d = new Dimension(gameWidth * px, gameHeight * px);
         setPreferredSize(d);
         board = new BufferedImage(d.width, d.height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = board.createGraphics();
+        g.setColor(Color.WHITE);
+        for (int i = 0; i < gameWidth; i++) {
+            for (int j = 0; j < gameHeight; j++) {
+                g.fill3DRect(i * px, j * px, px, px, true);
+            }
+        }
+        g.dispose();
     }
 
     private void paintBoard() {
