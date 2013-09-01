@@ -67,9 +67,17 @@ public class TetrisViewImpl extends JPanel implements TetrisView {
     @Override
     public void deleteLine(int y) {
         BufferedImage top = boards[activeBoard].getSubimage(0, 0, boards[activeBoard].getWidth(), y * px);
+        BufferedImage bot = null;
+        if (boards[activeBoard].getHeight() > (y + 1) * px) {
+            bot = boards[activeBoard].getSubimage(0, (y + 1) * px,
+                    boards[activeBoard].getWidth(), boards[activeBoard].getHeight() - (y + 1) * px);
+        }
         swapBuffers();
         Graphics2D g = boards[activeBoard].createGraphics();
         g.drawImage(top, null, 0, px);
+        if (bot != null) {
+            g.drawImage(bot, null, 0, (y + 1) * px);
+        }
         g.setColor(emptyColor);
         for (int i = 0; i < gameWidth; i++) {
             g.fill3DRect(i * px, 0, px, px, true);
