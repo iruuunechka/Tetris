@@ -7,11 +7,13 @@ import java.awt.image.BufferedImage;
 public class TetrisViewImpl extends JPanel implements TetrisView {
     private final int gameHeight;
     private final int gameWidth;
+    private final int px;
     private final BufferedImage board;
 
     public TetrisViewImpl(int gameWidth, int gameHeight, int px) {
         this.gameHeight = gameHeight;
         this.gameWidth = gameWidth;
+        this.px = px;
         Dimension d = new Dimension(gameWidth * px, gameHeight * px);
         setPreferredSize(d);
         board = new BufferedImage(d.width, d.height, BufferedImage.TYPE_INT_ARGB);
@@ -25,13 +27,8 @@ public class TetrisViewImpl extends JPanel implements TetrisView {
         }
     }
 
-    private int getBlockSize() {
-        return getPreferredSize().width / gameWidth;
-    }
-
     @Override
     public void redraw(int[][] oldBlocks, int[][] newBlocks) {
-        int px = getBlockSize();
         Graphics2D g = board.createGraphics();
         g.setColor(Color.WHITE);
         for (int[] block : oldBlocks) {
@@ -41,22 +38,28 @@ public class TetrisViewImpl extends JPanel implements TetrisView {
         for (int[] block : newBlocks) {
             g.fill3DRect(block[0] * px, block[1] * px, px, px, true);
         }
+        g.dispose();
         paintBoard();
     }
 
     @Override
     public void deleteLine(int y) {
-
+        BufferedImage top = board.getSubimage(0, 0, board.getWidth(), y * px);
+        Graphics2D g = board.createGraphics();
+        g.drawImage(top, null, 0, px);
+        g.setColor(Color.WHITE);
+        g.fill3DRect(0, 0, board.getWidth(), px, true);
+        g.dispose();
     }
 
     @Override
     public void pause() {
-
+        System.out.println("Paused");
     }
 
     @Override
     public void play() {
-
+        System.out.println("Play!!!");
     }
 
     @Override
