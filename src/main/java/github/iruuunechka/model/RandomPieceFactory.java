@@ -4,7 +4,8 @@ import java.util.Random;
 
 public class RandomPieceFactory implements PieceFactory {
     private final Random random = new Random();
-
+    private int startPosX = 0;
+    private int startPosY = 0;
     private static final int[][][][] piecePool = new int[][][][] {
         // square
         new int[][][] {
@@ -52,6 +53,12 @@ public class RandomPieceFactory implements PieceFactory {
     @Override
     public Piece createPiece() {
         System.out.println(random.nextInt(piecePool.length));
-        return new PieceImpl(piecePool[random.nextInt(piecePool.length)]);
+        return new PieceImpl(piecePool[random.nextInt(piecePool.length)], startPosX, startPosY);
+    }
+
+    @Override
+    public void setStartPosition(int x, int y) {
+        startPosX = x;
+        startPosY = y;
     }
 }

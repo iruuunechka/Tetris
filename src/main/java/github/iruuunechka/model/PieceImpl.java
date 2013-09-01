@@ -10,6 +10,12 @@ public class PieceImpl implements Piece{
         this.form = form;
     }
 
+    public PieceImpl(int[][][] form, int x, int y) {
+        this.form = form;
+        this.x = x;
+        this.y = y;
+    }
+
     private PieceImpl(int[][][] form, int x, int y, int cur) {
         this.form = form;
         this.x = x;

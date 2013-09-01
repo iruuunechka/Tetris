@@ -16,6 +16,7 @@ public class TetrisModelImpl implements TetrisModel, Runnable {
         this.view = view;
         this.delay = delay;
         this.pieceFactory = pieceFactory;
+        this.pieceFactory.setStartPosition(view.getWidth() / 2, 0);
         field = new ArrayList<>();
         for (int i = 0; i < view.getHeight(); ++i) {
             field.add(new boolean[view.getWidth()]);
@@ -118,7 +119,9 @@ public class TetrisModelImpl implements TetrisModel, Runnable {
             putFigure(curPiece.getBlocks());
             deleteLines();
             curPiece = pieceFactory.createPiece();
-            if (!check(curPiece.getBlocks())) {
+            if (check(curPiece.getBlocks())) {
+                view.redraw(curPiece.getBlocks(), curPiece.getBlocks());
+            } else {
                  //TODO gameOver
                 view.pause();
             }
