@@ -26,10 +26,7 @@ public class TetrisModelImpl implements TetrisModel, Runnable {
     }
 
     private void deleteLines() {
-        int maxDeletedLine = 0;
-        int countDeletedLines = 0;
-        int size = field.size();
-        for (int i = size - 1; i > 0; --i) {
+        for (int i = 0; i < field.size(); ++i) {
             int j;
             for (j = 0; j < field.get(i).length; ++j) {
                 if (!field.get(i)[j]) {
@@ -38,15 +35,9 @@ public class TetrisModelImpl implements TetrisModel, Runnable {
             }
             if (j == field.get(i).length) {
                 field.remove(i);
-                maxDeletedLine = maxDeletedLine == 0 ? i : maxDeletedLine;
-                countDeletedLines++;
+                field.add(0, new boolean[view.getWidth()]);
+                view.deleteLine(i);
             }
-        }
-        for (int i = 0; i < countDeletedLines; ++i) {
-            field.add(0, new boolean[view.getWidth()]);
-        }
-        if (countDeletedLines > 0) {
-            view.deleteLine(maxDeletedLine);
         }
     }
 
