@@ -58,14 +58,14 @@ public class TetrisModelImpl implements TetrisModel, Runnable {
     }
 
     private boolean check(int[][] blocks) {
-        for (int i = 0; i < blocks.length; ++i) {
-            if (blocks[i][1] < 0 || blocks[i][1] >= field.size()) {
+        for (int[] block : blocks) {
+            if (block[1] < 0 || block[1] >= field.size()) {
                 return false;
             }
-            if (blocks[i][0] < 0 || blocks[i][0] >= field.get(blocks[i][1]).length) {
+            if (block[0] < 0 || block[0] >= field.get(block[1]).length) {
                 return false;
             }
-            if (field.get(blocks[i][1])[blocks[i][0]]) {
+            if (field.get(block[1])[block[0]]) {
                 return false;
             }
         }
@@ -73,10 +73,9 @@ public class TetrisModelImpl implements TetrisModel, Runnable {
     }
 
     private void putFigure(int[][] blocks) {
-        for (int i = 0; i < blocks.length; ++i) {
-            field.get(blocks[i][1])[blocks[i][0]] = true;
+        for (int[] block : blocks) {
+            field.get(block[1])[block[0]] = true;
         }
-//        System.out.println("put");
     }
 
     @Override
