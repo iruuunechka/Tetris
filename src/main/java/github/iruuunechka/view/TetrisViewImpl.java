@@ -41,10 +41,10 @@ public class TetrisViewImpl extends JPanel implements TetrisView {
         g.dispose();
     }
 
-    private void paintBoard(Image image) {
+    private void paintBoard() {
         Graphics2D g = (Graphics2D)this.getGraphics();
         if (g != null) {
-            g.drawImage(image, 0, 0, null);
+            g.drawImage(boards[activeBoard], 0, 0, null);
             g.dispose();
         }
     }
@@ -61,7 +61,7 @@ public class TetrisViewImpl extends JPanel implements TetrisView {
             g.fill3DRect(block[0] * px, block[1] * px, px, px, true);
         }
         g.dispose();
-        paintBoard(boards[activeBoard]);
+        paintBoard();
     }
 
     @Override
@@ -83,17 +83,23 @@ public class TetrisViewImpl extends JPanel implements TetrisView {
             g.fill3DRect(i * px, 0, px, px, true);
         }
         g.dispose();
-        paintBoard(boards[activeBoard]);
+        paintBoard();
     }
 
     @Override
     public void pause() {
-        System.out.println("Paused");
+        swapBuffers();
+        Graphics2D g = boards[activeBoard].createGraphics();
+        g.setColor(emptyColor);
+        g.fill3DRect(0, 0, boards[activeBoard].getWidth(), boards[activeBoard].getHeight(), false);
+        g.dispose();
+        paintBoard();
     }
 
     @Override
     public void play() {
-        System.out.println("Play!!!");
+        swapBuffers();
+        paintBoard();
     }
 
     @Override
