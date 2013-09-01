@@ -11,6 +11,7 @@ public class TetrisModelImpl implements TetrisModel, Runnable {
     private final ArrayList<boolean[]> field;
     private Piece curPiece;
     private PieceFactory pieceFactory;
+    private Thread curThread;
 
     public TetrisModelImpl(TetrisView view, int delay, PieceFactory pieceFactory) {
         this.view = view;
@@ -80,14 +81,31 @@ public class TetrisModelImpl implements TetrisModel, Runnable {
 
     @Override
     public void pause() {
+        if (isPaused) {
+            return;
+        }
         isPaused = true;
         view.pause();
     }
 
     @Override
-    public void start() {
+    public void play() {
+        if (!isPaused) {
+            return;
+        }
         isPaused = false;
         view.play();
+    }
+
+    @Override
+    public void start() {
+        curThread = new Thread(this);
+        curThread.start();
+    }
+
+    @Override
+    public void gameOver() {
+        curThread.interrupt();
     }
 
     @Override
@@ -121,8 +139,8 @@ public class TetrisModelImpl implements TetrisModel, Runnable {
             if (check(curPiece.getBlocks())) {
                 view.redraw(curPiece.getBlocks(), curPiece.getBlocks());
             } else {
-                 //TODO gameOver
-                view.pause();
+                gameOver();
+                view.gameOver();
             }
         }
     }
@@ -146,4 +164,6 @@ public class TetrisModelImpl implements TetrisModel, Runnable {
             }
         }
     }
+    
+    
 }

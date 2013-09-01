@@ -6,6 +6,7 @@ public interface TetrisView {
 
     void pause();
     void play();
+    void gameOver();
 
     int getHeight();
     int getWidth();
